@@ -18,7 +18,7 @@ public class IndexController {
     @Path("/msg")
     public String getIndexMessage() {
         try {
-            newSession = getSession();
+            newSession = lookupService("java:app/TrainingService");
         } catch (NamingException ex) {
             Logger.getLogger(IndexController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -26,11 +26,11 @@ public class IndexController {
         return newSession.selectAll();
     }
 
-    private TrainingService getSession() throws NamingException {
+    private TrainingService lookupService(String serviceName) throws NamingException {
         InitialContext context = new InitialContext();
         try {
             return (TrainingService)
-                    context.lookup("java:app/TrainingService");
+                    context.lookup(serviceName);
         } catch (NamingException ex) {
             Logger.getLogger(IndexController.class.getName()).log(Level.SEVERE, null, ex);
             return null;
